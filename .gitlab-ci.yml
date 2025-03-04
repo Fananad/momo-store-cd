@@ -1,0 +1,13 @@
+stages:
+  - module-pipelines
+
+helm-install-sausage:
+  stage: module-pipelines
+  trigger:
+    include: "helm-chart/.gitlab-ci.yml"
+    strategy: depend 
+  only:
+    changes: 
+      - helm-chart/**/*
+
+            

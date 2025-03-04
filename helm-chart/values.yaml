@@ -1,0 +1,32 @@
+backend:
+  backend:
+    deployment:
+      replicas: 2
+      maxSurge: 20%
+      maxUnavailable: 1
+      repository: gitlab.praktikum-services.ru:5050/std-031-05/momo-store/backend
+      containerPort: 8081
+      limit:
+        requests:
+          memory: "64Mi"
+          cpu: "100m"
+        limits:
+          memory: "128Mi"
+          cpu: "200m"
+      gitLabJson: ewoJImF1dGhzIjogewoJCSJnaXRsYWIucHJha3Rpa3VtLXNlcnZpY2VzLnJ1OjUwNTAiOiB7CgkJCSJhdXRoIjogImMzUmtMVEF6TVMwd05UbzRObTlMTlhwd09BPT0iCgkJfQoJfQp9
+frontend:
+  frontend:
+    deployment:
+      replicas: 2
+      maxSurge: 20%
+      maxUnavailable: 1
+      repository: gitlab.praktikum-services.ru:5050/std-031-05/momo-store/frontend
+      containerPort: 80
+      limit:
+        requests:
+          memory: "64Mi"
+          cpu: "100m"
+        limits:
+          memory: "128Mi"
+          cpu: "200m"
+      gitLabJson: ewoJImF1dGhzIjogewoJCSJnaXRsYWIucHJha3Rpa3VtLXNlcnZpY2VzLnJ1OjUwNTAiOiB7CgkJCSJhdXRoIjogImMzUmtMVEF6TVMwd05UbzRObTlMTlhwd09BPT0iCgkJfQoJfQp9

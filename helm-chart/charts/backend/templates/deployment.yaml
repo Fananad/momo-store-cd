@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+    env: prod
+spec:
+  replicas: {{ .Values.backend.deployment.replicas }}
+  revisionHistoryLimit: 12
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.backend.deployment.maxSurge }}
+      maxUnavailable: {{ .Values.backend.deployment.maxUnavailable  }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.backend.deployment.repository }}:{{ .Chart.AppVersion }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.backend.deployment.containerPort }}
+          resources:
+            requests:
+              memory: "{{ .Values.backend.deployment.limit.requests.memory }}"
+              cpu: "{{ .Values.backend.deployment.limit.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.backend.deployment.limit.limits.memory }}"
+              cpu: "{{ .Values.backend.deployment.limit.limits.cpu }}"
+      imagePullSecrets:
+        - name: git-{{ .Release.Name }}-{{ .Chart.Name }}

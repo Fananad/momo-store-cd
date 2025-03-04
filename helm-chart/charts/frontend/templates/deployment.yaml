@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+    env: prod
+spec:
+  replicas: {{ .Values.frontend.deployment.replicas }}
+  revisionHistoryLimit: 12
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.frontend.deployment.maxSurge }}
+      maxUnavailable: {{ .Values.frontend.deployment.maxUnavailable  }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.frontend.deployment.repository }}:{{ .Chart.AppVersion }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: {{ .Chart.Name }}
+              containerPort: {{ .Values.frontend.deployment.containerPort }}
+          resources:
+            requests:
+              memory: "{{ .Values.frontend.deployment.limit.requests.memory }}"
+              cpu: "{{ .Values.frontend.deployment.limit.requests.cpu }}"
+            limits:
+              memory: "{{ .Values.frontend.deployment.limit.limits.memory }}"
+              cpu: "{{ .Values.frontend.deployment.limit.limits.cpu }}"
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+          env:
+            - name: VUE_APP_API_URL
+              value: "http://momo-store-podionov.ru:80/"
+            - name: NODE_ENV
+              value: "production"  
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-conf-{{ .Release.Name }}-{{ .Chart.Name }}          
+      imagePullSecrets:
+        - name: git-{{ .Release.Name }}-{{ .Chart.Name }}
