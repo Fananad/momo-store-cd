@@ -8,7 +8,7 @@ variable service_account_key_file {
 }
 variable cloud_id {
   description = "id cloud"
-  default     = "b1gljht5bbf8u60eioc6"
+  default     = "bpf3m3t38c6ij4khk4bb"
   type        = string
 }
 variable folder_id {
@@ -18,7 +18,7 @@ variable folder_id {
 }
 variable user_id {
   description = "id servise user"
-  default     = "ajeks8073uac0ojkl2h2"
+  default     = "ajemivk31kg1dq0crmfb"
   type        = string
 }
 #=================#
