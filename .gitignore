@@ -3,3 +3,5 @@ terraform/.terraform
 *.sec
 kube/*
 *.tgz
+terraform/.terraform.*
+terraform/terraform*
